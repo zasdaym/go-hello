@@ -12,9 +12,16 @@ func hello(w http.ResponseWriter, r *http.Request) {
   log.Println("hello function executed")
 }
 
+func getenv(key, fallback string) string {
+  if value, ok := os.LookupEnv(key); ok {
+    return value
+  }
+  return fallback
+}
+
 func main() {
-  os.Setenv("HELLO_PORT", "8080")
+  port := ":" + getenv("HELLO_PORT", "8080")
+  fmt.Printf("go-hello running in port %s\n", port)
   http.HandleFunc("/", hello)
-  port := ":" + os.Getenv("HELLO_PORT")
   log.Fatal(http.ListenAndServe(port, nil))
 }
