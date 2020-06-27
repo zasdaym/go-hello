@@ -1,27 +1,27 @@
 package main
 
 import (
-  "fmt"
-  "log"
-  "net/http"
-  "os"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
 )
 
 func hello(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "Hello, World. Path: %s\n", r.URL.Path)
-  log.Println("hello function executed")
+	fmt.Fprintf(w, "Hello, World. Path: %s\n", r.URL.Path)
+	log.Println(r.URL.Path)
 }
 
-func getenv(key, fallback string) string {
-  if value, ok := os.LookupEnv(key); ok {
-    return value
-  }
-  return fallback
+func getEnv(key, fallback string) string {
+	if val, ok := os.LookupEnv(key); ok {
+		return val
+	}
+	return fallback
 }
 
 func main() {
-  port := ":" + getenv("HELLO_PORT", "8080")
-  fmt.Printf("go-hello running in port %s\n", port)
-  http.HandleFunc("/", hello)
-  log.Fatal(http.ListenAndServe(port, nil))
+	port := ":" + getEnv("PORT", "8080")
+	fmt.Printf("running on %s\n", port)
+	http.HandleFunc("/", hello)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
