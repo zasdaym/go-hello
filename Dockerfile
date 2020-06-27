@@ -6,4 +6,6 @@ RUN CGO_ENABLED=0 go build -o app
 FROM scratch
 WORKDIR /app
 COPY --from=builder /app/app .
+ENV PORT 8080
+EXPOSE PORT
 CMD ["./app"]
